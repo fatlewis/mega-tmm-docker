@@ -1,0 +1,2 @@
+# Use flock to run script only if it is not currently running. Pipe output into log
+* * * * * /usr/bin/flock -n /tmp/pull-media.lock /usr/bin/pull-media.sh >> /var/log/cron.log 2>&1
