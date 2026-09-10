@@ -1,17 +1,19 @@
 services:
-  megacmd:
-    container_name: mega-cmd
+  megacmd-tmm:
+    container_name: mega-cmd-tmm
     build:
       context: ./megacmd
       dockerfile: Dockerfile
     environment:
-      - MEGA_IN_FOLDER=${MEGA_IN_FOLDER:? MEGA_IN_FOLDER must be set to detect files ready for download} # folder on mega from which to download files
-      - MEGA_OUT_FOLDER=${MEGA_OUT_FOLDER:? MEGA_OUT_FOLDER must be set to move downloaded files on Mega} # folder on mega to which downloaded files are moved
-      - OUT_FOLDER=${OUT_FOLDER:? OUT_FOLDER must be set to download files onto host machine} # folder on host machine which receives downloaded files
+      - SRC_FOLDER=${SRC_FOLDER:? SRC_FOLDER must be set to detect files ready for download} # folder on mega from which to download files
+      - DEST_FOLDER=${DEST_FOLDER:? DEST_FOLDER must be set to download files onto host machine} # folder on host machine which receives downloaded files
     volumes:
       - megacmd-data:/root/.megaCmd # mega-cmd data directory (stores session, etc.)
       - /temp-data # temporary directory when downloading files
-      - ${OUT_FOLDER}:/mega-out # directory into which completed downloads are moved
+      - ${DEST_FOLDER}:/mega-out # directory into which completed downloads are moved
+
+      - tmm-data:/root/tinyMediaManager/data # tmm data directory (stores scraping configs, etc.)
 
 volumes:
   megacmd-data:
+  tmm-data:

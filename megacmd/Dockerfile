@@ -1,12 +1,24 @@
-FROM ubuntu:latest
+FROM ubuntu:24.04
 
 WORKDIR /root
 
+# Set CPU architecture for program downloads
+ARG TARGETARCH
+
 # Install mega-cmd
-RUN apt-get update && apt-get install -y curl \
-    && curl -O https://mega.nz/linux/repo/xUbuntu_24.04/amd64/megacmd-xUbuntu_24.04_amd64.deb \
-    && apt-get install -y "$PWD/megacmd-xUbuntu_24.04_amd64.deb" \
-    && rm "$PWD/megacmd-xUbuntu_24.04_amd64.deb"
+RUN apt-get update 
+RUN apt-get install -y curl
+RUN curl -O https://mega.nz/linux/repo/xUbuntu_24.04/${TARGETARCH}/megacmd-xUbuntu_24.04_${TARGETARCH}.deb
+RUN apt-get install -y "$PWD/megacmd-xUbuntu_24.04_${TARGETARCH}.deb"
+RUN rm megacmd-xUbuntu_24.04_${TARGETARCH}.deb
+
+# Install TinyMediaManager to use CLI
+RUN curl -O https://release.tinymediamanager.org/v5/dist/tinyMediaManager-5.3.2-linux-${TARGETARCH}.tar.xz
+RUN apt-get install -y xz-utils
+RUN tar -xf tinyMediaManager-5.3.2-linux-${TARGETARCH}.tar.xz
+RUN rm tinyMediaManager-5.3.2-linux-${TARGETARCH}.tar.xz
+# Copy preconfigured data folder so CLI works correctly
+COPY /tmm-data /root/tinyMediaManager/data
 
 # Need to set machine-id to avoid this bug https://github.com/meganz/MEGAcmd/issues/623
 RUN apt-get install -y dbus && dbus-uuidgen > /etc/machine-id 
