@@ -10,7 +10,7 @@ for SUBFOLDER in "movies" "tv_shows" "videos"; do
   if ! mega-ls "${SRC_FOLDER}" | grep -q ^${SUBFOLDER}$; then
     mega-mkdir "${SRC_FOLDER}/${SUBFOLDER}"
   fi
-  mkdir /mega-out/${SUBFOLDER}
+  mkdir -p /mega-out/${SUBFOLDER}
 
   # fetch any new files. grep -v : strips the root directory out of the file list.
   NUM_FILES=$(mega-ls "${SRC_FOLDER}/${SUBFOLDER}" | grep -v : | wc -l)
