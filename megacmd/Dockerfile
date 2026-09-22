@@ -2,8 +2,11 @@ FROM ubuntu:24.04
 
 WORKDIR /root
 
-# Set CPU architecture for program downloads
+# Set CPU architecture for program downloads. If absent, assume we're building in LibreELEC
 ARG TARGETARCH
+
+# Setting default here due to bug with DockerFile ARG values (https://github.com/docker/buildx/issues/510)
+ENV TARGETARCH=${TARGETARCH:-arm64}
 
 # Install mega-cmd
 RUN apt-get update 
